@@ -66,7 +66,6 @@ var tempDir = null
 
 if (argv.f == "mp4") {
 
-    processor = require('videoshow');
     var frames = [];
     tempDir = fs.mkdtempSync('/var/tmp/facegif_');
 
@@ -204,13 +203,22 @@ db.each(query, function(err, row) {
 
             var path = tempDir + "/frame_%03d.png";
             var s = argv.s + 'x' + argv.s;
-            var fps = 60;
+            var fps = 29.43;
             var frameduration = 1000 / fps
             var imageframes = Math.ceil(argv.d / frameduration);
             var duration = (imageframes * count) / fps;
 
-            var cmd = 'ffmpeg -i "' + path + '" -movflags faststart -vf "zoompan=d=' + imageframes + '" -t ' + duration + ' -threads 1 -r ' + fps + ' -s ' + s + ' -y ' + vout;
-            //console.log(cmd)
+            var cmd = 'ffmpeg ';
+                cmd += '-y ';
+                cmd += '-i ' + path + ' ';
+                cmd += '-c:v libx264 ';
+                cmd += '-profile:v baseline ';
+                cmd += '-level 3.0 ';
+                cmd += '-pix_fmt yuv420p ';
+                cmd += '-r 29.43 ';
+                cmd += vout;
+
+            console.log(cmd)
 
             exec(cmd, function(a, b, c) {
                 cleanup();
