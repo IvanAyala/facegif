@@ -1,0 +1,19 @@
+{
+  "name": "facegif",
+  "version": "1.0.0",
+  "description": "Create animated gif from OSX Photos.app database",
+  "main": "app.js",
+  "dependencies": {
+    "canvas": "^1.6.3",
+    "fs-extra": "^2.0.0",
+    "gifencoder": "^1.0.6",
+    "optimist": "^0.6.1",
+    "sqlite3": "^3.1.8"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jewe Pasch",
+  "license": "ISC"
+}
