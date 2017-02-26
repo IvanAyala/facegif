@@ -8,6 +8,8 @@ var argv = require('optimist')
     .default('l', 0)
     .default('z', 1.2)
     .default('f', 'gif')
+    .default('offset', 0)
+    .describe('offset', 'Skip the first n results')
     .describe('v', 'Set verbose output')
     .describe('f', 'Output format. Can be gif or mp4')
     .alias('z', 'zoom')
@@ -90,9 +92,9 @@ var ctx = canvas.getContext('2d');
 var cleanup = function() {
 
     db.close();
-    // if (argv.f == "mp4") {
-    //     fs.remove(tempDir);
-    // }
+    if (argv.f == "mp4") {
+        fs.remove(tempDir);
+    }
     fs.removeSync(database);
     fs.removeSync(database + '-shm');
     fs.removeSync(database + '-wal');
@@ -122,6 +124,10 @@ query += ' WHERE RKMaster.duration IS NULL AND RKMaster.isInTrash = 0 AND RKPers
 
 if (argv.l > 0) {
     query += ' LIMIT ' + argv.l;
+}
+
+if (argv.offset > 0) {
+    query += ' OFFSET ' + argv.offset;
 }
 
 db.each(query, function(err, row) {
@@ -218,7 +224,7 @@ db.each(query, function(err, row) {
                 cmd += '-r 29.43 ';
                 cmd += vout;
 
-            console.log(cmd)
+            // console.log(cmd)
 
             exec(cmd, function(a, b, c) {
                 cleanup();
